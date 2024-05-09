@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'docker build -t registry.devops.local/devops/jenkins-nginx .'
+        sh 'docker build -t rhonguerra/jenkins-nginx:batch3 .'
       }
     }
     stage('Login') {
@@ -19,13 +19,13 @@ pipeline {
     }
     stage('Push') {
       steps {
-        sh 'docker push registry.devops.local/devops/jenkins-nginx'
+        sh 'docker push rhonguerra/jenkins-nginx:batch3'
       }
     }
     stage('Deploy') {
             steps {
               script {
-                   sh "kubectl apply -f service.yml -f deployment.yml"
+                   sh "docker run --name=mywebapp1 -d -p 8084:80 jenkins-nginx:batch3"
                 }
               }
             }
